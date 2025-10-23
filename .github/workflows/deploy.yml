@@ -1,0 +1,39 @@
+name: Smart Auto Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10' # Change if your project uses a different Python version
+      
+      - name: Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Run Tests
+        run: |
+          pytest # Or your test command
+      
+      - name: Deploy (Sample)
+        if: success()
+        run: |
+          echo "Deploying..." # Replace with your actual deployment script or command
+      
+      - name: Notify
+        if: failure()
+        run: |
+          echo "Deployment failed!" # Optionally add Slack/email steps here
